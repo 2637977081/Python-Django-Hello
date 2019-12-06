@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SUCCESS</title>
+    <style>
+        body{
+            margin: 0;
+        }
+
+        video{
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-height: 100%;
+            min-width: 100%;
+            width: auto;
+            height: auto;
+            z-index: -999;
+        }
+    </style>
+</head>
+<body>
+    SUCCESS !
+    <video autoplay loop poster="/static/images/gb.png" id="bgvid" style="width: 500px;height: 300px">
+        <source src="/static/video/bg.mp4" type="video/mp4">
+    </video>
+    <div>
+        <label>欢迎 {{ username }}</label>
+        <div style="margin: 20px 200px">
+            <img src="{{image_first}}" style="height: 300px;width: 200px;float: left">
+            <form method="post" action="/change" enctype="multipart/form-data" style="float: left;margin-left: 50px">
+                <input type="text" style="display: none" value="{{ image_first }}" name="image_per">
+                <input type="submit" value="改变">
+            </form>
+            <img src="{{ image_second }}" style="height: 300px;width: 200px;float: left;margin-left: 50px">
+        </div>
+
+    </div>
+</body>
+</html>
