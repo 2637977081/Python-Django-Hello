@@ -6,6 +6,7 @@
     <style>
         body{
             margin: 0;
+            text-align: center;
         }
 
         video{
@@ -13,25 +14,44 @@
             right: 0;
             bottom: 0;
             min-height: 100%;
+            display: block;
+            object-fit:fill;
             min-width: 100%;
             width: auto;
             height: auto;
             z-index: -999;
         }
+        source{
+            min-width: 100%;
+            min-height: 100%;
+            height: auto;
+            width: auto;
+        }
+        .btn{
+            margin-top: 20%;
+            width:140px;
+            height:36px;
+            line-height:18px;font-size:18px;
+            background:url("/static/images/btn.jpg")
+            no-repeat left top;
+            color:#FFF;
+            padding-bottom:4px
+        }
     </style>
 </head>
 <body>
     SUCCESS !
-    <video autoplay loop poster="/static/images/gb.png" id="bgvid" style="width: 500px;height: 300px">
+    <video autoplay loop poster="/static/images/gb.png" id="bgvid">
         <source src="/static/video/bg.mp4" type="video/mp4">
     </video>
-    <div>
+    <div style="margin: auto;text-align: center">
         <label>欢迎 {{ username }}</label>
-        <div style="margin: 20px 200px">
+        <div style="margin-left: 30%;margin-top: 5%">
             <img src="{{image_first}}" style="height: 300px;width: 200px;float: left">
             <form method="post" action="/change" enctype="multipart/form-data" style="float: left;margin-left: 50px">
                 <input type="text" style="display: none" value="{{ image_first }}" name="image_per">
-                <input type="submit" value="改变">
+                <input type="submit" value="改变" class="btn" onmouseover="this.style.backgroundPosition='left -36px'"
+                       onmouseout="this.style.backgroundPosition='left top'">
             </form>
             <img src="{{ image_second }}" style="height: 300px;width: 200px;float: left;margin-left: 50px">
         </div>
