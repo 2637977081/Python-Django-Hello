@@ -3,24 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        body{
+            margin: 0;
+            text-align: center;
+        }
+        video{
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-height: 100%;
+            display: block;
+            object-fit:fill;
+            min-width: 100%;
+            width: auto;
+            height: auto;
+            z-index: -999;
+        }
+        source{
+            min-width: 100%;
+            min-height: 100%;
+            height: auto;
+            width: auto;
+        }
+        #content {
+            margin: 150px auto;
+            width: 100%;
+            height: 460px;
+            border: 1px transparent solid;
+        }
+        #box {
+            margin: 50px auto;
+            width: 30%;
+            height: 360px;
+            background-color: #fff;
+            text-align: center;
+            border-radius: 15px;
+            border: 2px #fff solid;
+            box-shadow: 10px 10px 5px #000000;
+        }
+        .title {
+            line-height: 58px;
+            margin-top: 20px;
+            font-size: 36px;
+            color: #000;
+            height: 58px;
+        }
+        #box:hover {
+            border: 2px #fff solid;
+        }
+        .input {
+            margin-top: 20px;
+        }
+        input {
+            margin-top: 5px;
+            outline-style: none;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 13px 14px;
+            width: 70%;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: "Microsoft soft";
+        }
+
+        button {
+            margin-top: 20px;
+            border: none;
+            color: #000;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 15px;
+            background-color: #CCCCCC;
+        }
+        button:hover{
+            background-color: #B721FF;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-    <form action="/login" method="post" enctype="multipart/form-data">
-        <p>
-            <label>用户名：</label>
-            <input type="text" name="username" id="username">
-        </p>
-        <p>
-            <label>密  码：</label>
-            <input type="password" name="password" id="password">
-        </p>
-        <p>
-            <label>头像：</label>
-            <input type="file" name="image" id="image">
-        </p>
-        <p>
-            <input type="submit" value="提交">
-        </p>
-    </form>
+    <video autoplay loop poster="/static/images/gb.png" id="bgvid">
+        <source src="/static/video/bg.mp4" type="video/mp4">
+    </video>
+    <div>
+        <form action="/login" method="post" enctype="multipart/form-data">
+            <div id="content">
+                <div id="box">
+                    <div class="title">Login</div>
+                    <div class="input">
+                        <input type="text" name="username" id="username" placeholder="用户名" ><br>
+                        <input type="password" name="password" id="password" placeholder="密码"><br>
+                        <input type="submit" value="登陆">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

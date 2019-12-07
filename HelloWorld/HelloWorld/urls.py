@@ -29,9 +29,10 @@ urlpatterns = [
     # kwargs: 视图使用的字典类型的参数。
     # name: 用来反向获取 URL。
     #
-    path('', view.hello),
+    path('', view.login_page),
     path('hello', view.helloHtml),
     path('login/page', view.login_page),
     path('login',view.login),
     path('change',view.chang),
+    path('send/email',view.send_email),
 ]
