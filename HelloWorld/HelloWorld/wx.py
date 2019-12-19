@@ -67,7 +67,7 @@ def wx_verification(request):
                 we_img = wechat.upload_media(media_file=img, media_type='image')
                 result = wechat.response_image(we_img['media_id'])
                 return HttpResponse(result, content_type='application/xml')
-            elif context=='色图':
+            elif '色图' in context or '涩图' in context:
                 dir_path = 'F:/data/images'
                 filenames = os.listdir(dir_path)
                 max_len = len(filenames)
@@ -77,6 +77,11 @@ def wx_verification(request):
                 img = open(path, 'rb')
                 we_img = wechat.upload_media(media_file=img, media_type='image')
                 result = wechat.response_image(we_img['media_id'])
+                return HttpResponse(result, content_type='application/xml')
+            elif '天气' in context:
+                context=context.replace('：',':')
+                city_str = context.split(":").pop(1)
+                result = wechat.response_text(weather(city_str))
                 return HttpResponse(result, content_type='application/xml')
             result  = wechat.response_text(context)
             return HttpResponse(result, content_type='application/xml')
@@ -207,3 +212,27 @@ def cv_image(input_image_path, output_image_path):
                                      cv2.ADAPTIVE_THRESH_MEAN_C,
                                      cv2.THRESH_BINARY, blockSize=3, C=2)
     cv2.imwrite(output_image_path, img_edge)
+
+
+def weather(city):
+    print(city)
+    filepath = os.path.join(STATIC_ROOT,'json/citycode.json')
+    file = open(filepath,'r', encoding='UTF-8')
+    city_json = json.load(file)
+    city_code = "101010100"
+    for item in city_json:
+        if item['city_name'] == city:
+            city_code = item['city_code']
+            break
+
+    url = 'http://t.weather.sojson.com/api/weather/city/'+city_code
+    result = requests.get(url)
+
+    content = result.content.decode()
+    content_json = json.loads(content)
+    print(content_json['data']['forecast'])
+    forecast = content_json['data']['forecast']
+    today = forecast.pop(0)
+    message = today['ymd'] + '\r' + today['week'] + '\r' + today['high'] + ' ' + today['low'] + '\r' + today['type'] + '\r' + today['notice']
+    return message
+
