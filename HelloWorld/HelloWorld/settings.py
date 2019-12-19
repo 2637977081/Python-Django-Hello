@@ -122,7 +122,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATICFILES_DIRS = (
     ('images', os.path.join(STATIC_ROOT, 'images').replace('\\','/')),
+    ('images_sexy', os.path.join(STATIC_ROOT, 'images/sexy').replace('\\','/')),
     ('css', os.path.join(STATIC_ROOT, 'css').replace('\\','/')),
     ('video', os.path.join(STATIC_ROOT, 'video').replace('\\','/')),
     ('bootstrap', os.path.join(STATIC_ROOT, 'bootstrap').replace('\\','/')),
 )
+
+ALLOWED_HOSTS = ['catcoder.ngrok2.xiaomiqiu.cn']

@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-
+import hashlib
 import os
 from email.header import Header
 from email.mime.image import MIMEImage
@@ -120,7 +120,7 @@ def email_fun(image_first_path,image_second_path,receivers):
     # 构造附件2，传送当前目录下的 runoob.txt 文件
     att2 = MIMEText(open(image_second_path, 'rb').read(), 'base64', 'utf-8')
     att2["Content-Type"] = 'application/octet-stream'
-    att2["Content-Disposition"] = 'attachment; filename="lvgang.jpg"'
+    att2["Content-Disposition"] = 'attachment; filename="mao.jpg"'
     message.attach(att2)
 
     try:

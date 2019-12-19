@@ -17,7 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 
-from HelloWorld import view
+from HelloWorld import view, wx
 
 urlpatterns = [
     # Django path() 可以接收四个参数，分别是两个必选参数：route、view 和两个可选参数：kwargs、name。
@@ -35,4 +35,5 @@ urlpatterns = [
     path('login',view.login),
     path('change',view.chang),
     path('send/email',view.send_email),
+    path('wx',wx.wx_verification),
 ]
