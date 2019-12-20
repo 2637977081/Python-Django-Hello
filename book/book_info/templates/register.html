@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>用户注册</title>
+    <link rel="stylesheet" href="/static/css/cat_css.css" type="text/css" />
 </head>
 <body>
-    <h3 class="panel-title">用户注册</h3>
-    <hr>
-    <form action="{% url  'register'%}" method="post">{% csrf_token %}
-        <label for="user_name">用户名</label>
-        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
-        <label for="password">密码</label>
-        <input type="password" name="password" id="password" placeholder="请输入密码"><br>
-        <label for="password2">密码</label>
-        <input type="password" name="password2" id="password2" placeholder="请再次输入密码"><br>
-        <button type="submit">注册</button>
-    </form>
+    <video autoplay loop poster="/static/images/gb.png" id="bgvid">
+        <source src="/static/video/bg.mp4" type="video/mp4">
+    </video>
+    <div>
+        <form action="{% url  'register'%}" method="post">{% csrf_token %}
+            <div id="content">
+                <div id="box">
+                    <div class="title">注册</div>
+                    <div class="input">
+                        <label for="user_name">用户名</label>
+                        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
+                        <label for="password">密码</label>
+                        <input type="password" name="password" id="password" placeholder="请输入密码"><br>
+                        <label for="password2">密码</label>
+                        <input type="password" name="password2" id="password2" placeholder="请再次输入密码"><br>
+                        <button type="submit">注册</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

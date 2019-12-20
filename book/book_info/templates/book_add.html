@@ -2,23 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>用户登录</title>
+    <title>添加图书</title>
+    <link rel="stylesheet" href="/static/css/cat_css.css" type="text/css" />
 </head>
 <body>
-    <h3>用户登录</h3>
-    <hr>
-    <form action="/book/add" method="post">{% csrf_token %}
-        <label for="user_name">图书名称</label>
-        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
-        <label for="password">作者</label>
-        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
-        <label for="password">价格</label>
-        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
-        <label for="password">分类</label>
-        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
-        <label for="password">图书封面</label>
-        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
-        <button type="submit">提交</button>
-    </form>
+    <video autoplay loop poster="/static/images/gb.png" id="bgvid">
+        <source src="/static/video/bg.mp4" type="video/mp4">
+    </video>
+    <div>
+        <form action="{% url 'book_add' %}" method="post">{% csrf_token %}
+            <div id="content">
+                <div id="box" style="height: 450px">
+                    <div class="title">添加图书</div>
+                    <div class="input">
+                        <label for="user_name">图书名称</label>
+                        <input type="text" name="name" id="name" placeholder="请输入图书名称"><br>
+                        <label for="password">作者</label>
+                        <input type="text" name="author" id="author" placeholder="请输入作者"><br>
+                        <label for="password">价格</label>
+                        <input type="text" name="price" id="price" placeholder="请输入价格"><br>
+                        <label for="password">分类</label>
+                        <input type="text" name="cate" id="cate" placeholder="请输入分类"><br>
+                        <label for="password">图书封面</label>
+                        <input type="text" name="picture" id="picture" placeholder="请输入图书封面"><br>
+                        <button type="submit">提交</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
 </body>
 </html>

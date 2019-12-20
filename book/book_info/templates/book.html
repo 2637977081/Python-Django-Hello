@@ -5,16 +5,19 @@
     <link rel="stylesheet" href="{% static 'css/common.css' %}">
 {% endblock header %}
 {% block bottom-content %}<!--重写bottom-block板块-->
-    <ul class="b1">
+    <ul class="b1" >
         {% for i in book_list %}<!--book_list是从视图文件view.py传过来的-->
         <li>
-            <ul class="b2">
+            <ul class="b2" style="float: left">
                 <li><img src="/media/{{i.picture}}" alt="{{i.name}}"></li><!--图书封面-->
                 <li class="li-name">{{i.name}}</li><!--图书名-->
                 <li class="li-author">{{i.author}}</li><!--图书作者-->
                 <li class="li-price">￥{{i.price}}</li><!--图书价格-->
-            </ul>>
-        </li>>
+                {% if username != None %}
+                    <li><button style="height: 20px;font-size: 10px"><a href="{% url 'book_delete' book_id=i.id %}">删除</a></button></li>
+                {% endif %}
+            </ul>
+        </li>
         {% endfor %}
     </ul>
     <div style="clear:both;"></div>

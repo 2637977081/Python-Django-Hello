@@ -4,28 +4,46 @@
     <meta charset="UTF-8">
     <title>{% block title %}<!--继承的子页放标题-->{% endblock %}</title>
     {% block header %}<!--继承的子页引入css文件和js文件-->{% endblock %}
+    <link rel="stylesheet" href="/static/css/cat_css.css" type="text/css" />
 </head>
 <body>
+
+    <video autoplay loop poster="/static/images/gb.png" id="bgvid">
+        <source src="/static/video/bg.mp4" type="video/mp4">
+    </video>
+
     <div class="header">
-        <h2>图书一览</h2>
-        <p>
-            <li><a href="/book/add/">图书添加</a></li>
-            {% if use.is_authenticated %}
-            <span>{{user.username}},您好!</span>&nbsp;&nbsp;<a href="{% url 'logout' %}">注销</a>
+        <div class="title">图书一览</div>
+        <div style="position: absolute;right: 20px;top: 55px">
+            {% if username != None %}
+                <button>{{username}},您好!</button>
+                <button><a href="/book/add/">图书添加</a></button>
+                <button><a href="{% url 'logout' %}">注销</a></button>
             {% else %}
-            <a href="{% url 'register'%}">注册</a>&nbsp;&nbsp;<a href="{% url 'login'%}">登录</a>
+                <button><a href="{% url 'register'%}">注册</a></button>
+                <button><a href="{% url 'login'%}">登录</a></button>
             {% endif %}
-        </p>
+        </div>
     </div>
     <hr>
-    {% if cate_list %}
-    <ul class="cate-list">
-        {% for cate in cate_list %}
-        <li id="{{cate.id}}"><a href="{% url 'book' cate.id %}">{{cate.name}}</a></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    {% block bottom-content %}<!--此处放具体的图书信息-->{% endblock bottom-content %}
+    <div>
+        <div style="float: left;background: #CCCCCC;height: 560px;width: 200px">
+            {% if cate_list %}
+                <ul>
+                {% for cate in cate_list %}
+                    <li id="{{cate.id}}">
+                        <a href="{% url 'book' cate.id %}">{{cate.name}}</a>
+                        {% if username != None %}
+                        <button style="height: 20px; font-size: 10px"><a href="{% url 'cate_delete' cate_id=cate.id %}">删除</a></button>
+                        {% endif %}
+                    </li><br/>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <div style="float: left">
+            {% block bottom-content %}<!--此处放具体的图书信息-->{% endblock bottom-content %}
+        </div>
+    </div>
 </body>
 </html>
