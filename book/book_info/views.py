@@ -15,7 +15,7 @@ def book(request, cate_id):
     # if username is None:
     #     username = 'none'
     cate_list = Cate.objects.all()
-    if cate_id == 0:
+    if cate_id == 0 or cate_id is None:
         book_list = Book.objects.all()
     else:
         # cate_list = Cate.objects.all()
