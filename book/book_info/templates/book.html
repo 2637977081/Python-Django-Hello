@@ -1,0 +1,21 @@
+{% extends 'base.html' %}<!--继承父模板-->
+{% load static %}<!--加载静态文件的标签-->
+{% block title %}图书{% endblock %}<!--指定该页的标题-->
+{% block header %}<!--在header板块引入样式表-->
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+{% endblock header %}
+{% block bottom-content %}<!--重写bottom-block板块-->
+    <ul class="b1">
+        {% for i in book_list %}<!--book_list是从视图文件view.py传过来的-->
+        <li>
+            <ul class="b2">
+                <li><img src="/media/{{i.picture}}" alt="{{i.name}}"></li><!--图书封面-->
+                <li class="li-name">{{i.name}}</li><!--图书名-->
+                <li class="li-author">{{i.author}}</li><!--图书作者-->
+                <li class="li-price">￥{{i.price}}</li><!--图书价格-->
+            </ul>>
+        </li>>
+        {% endfor %}
+    </ul>
+    <div style="clear:both;"></div>
+{% endblock bottom-content %}

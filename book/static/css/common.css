@@ -1,0 +1,61 @@
+.header {
+    height: 100px;
+}
+
+.header h2 {
+    float: left;
+}
+
+.header p {
+    float: right;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.cate-list {
+    background: #eee;
+    height: 40px;
+}
+
+.cate-list li {
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    float: left;
+    text-align: center;
+}
+
+.b1 {
+    width: 1000px;
+    margin: 50px auto;
+}
+
+.b2{
+    float:left;
+    width:200px;
+    height:300px;
+    text-align:center;
+    font-size:12px;
+}
+.b2 li{
+    line-height:1.5;
+}
+
+.b2 img{
+    width:150px;
+    height:150px;
+}
+.li-name,.li-author{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.li-author{
+    color:#999;
+}
+.li-price{
+    font-family:'Arial Black';
+    color:#f30;
+}

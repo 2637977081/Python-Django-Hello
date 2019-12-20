@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}<!--继承的子页放标题-->{% endblock %}</title>
+    {% block header %}<!--继承的子页引入css文件和js文件-->{% endblock %}
+</head>
+<body>
+    <div class="header">
+        <h2>图书一览</h2>
+        <p>
+            {% if use.is_authenticated %}
+            <span>{{user.username}},您好!</span>&nbsp;&nbsp;<a href="{% url 'logout' %}">注销</a>
+            {% else %}
+            <a href="{% url 'register'%}">注册</a>&nbsp;&nbsp;<a href="{% url 'login'%}">登录</a>
+            {% endif %}
+        </p>
+    </div>
+    <hr>
+    {% if cate_list %}
+    <ul class="cate-list">
+        {% for cate in cate_list %}
+        <li id="{{cate.id}}"><a href="{% url 'book' cate.id %}">{{cate.name}}</a></li>
+        {% endfor %}
+        <li><a href="/admin/">后台管理</a></li>
+    </ul>
+    {% endif %}
+
+    {% block bottom-content %}<!--此处放具体的图书信息-->{% endblock bottom-content %}
+</body>
+</html>
