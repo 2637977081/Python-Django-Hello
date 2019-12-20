@@ -12,8 +12,15 @@ def hello(request):
 
 def book(request, cate_id):
     cate_list = Cate.objects.all()
-    cate = Cate.objects.get(id=cate_id)
-    book_list = Book.objects.filter(cate=cate)
+    if cate_id == 0:
+        book_list = Book.objects.all()
+    else:
+        # cate_list = Cate.objects.all()
+        try:
+            cate = Cate.objects.get(id=cate_id)
+            book_list = Book.objects.filter(cate=cate)
+        except:
+            pass
     return render(request, 'book.html', locals())
 
 
@@ -46,7 +53,7 @@ def log_in(request):
             if user is not None:
                 login(request, user)
                 print("登录成功!")
-                return render(request, 'book.html', locals())
+                return redirect('/book/0')
         else:
             errormsg = '用户名或密码错误!'
             return render(request, 'login.html', locals())
@@ -59,3 +66,12 @@ def log_out(request):
     except Exception as e:
         print(e)
     return redirect(request.META['HTTP_REFERER'])
+
+
+def book_add(request):
+    if request.method == 'GET':
+        return render(request, 'book_add.html', locals())
+    try:
+        print(request)
+    except Exception as e:
+        print(e)

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+</head>
+<body>
+    <h3>用户登录</h3>
+    <hr>
+    <form action="/book/add" method="post">{% csrf_token %}
+        <label for="user_name">图书名称</label>
+        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
+        <label for="password">作者</label>
+        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
+        <label for="password">价格</label>
+        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
+        <label for="password">分类</label>
+        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
+        <label for="password">图书封面</label>
+        <input type="text" name="user_name" id="user_name" placeholder="请输入用户名"><br>
+        <button type="submit">提交</button>
+    </form>
+</body>
+</html>

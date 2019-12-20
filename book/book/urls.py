@@ -23,6 +23,7 @@ from book import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('book/<int:cate_id>/', views.book, name="book"),
+    path('book/add/', views.book_add, name="book"),
     path('register/', views.register, name="register"),
     path('login/', views.log_in, name="login"),
     path('logout/', views.log_out, name="logout"),
