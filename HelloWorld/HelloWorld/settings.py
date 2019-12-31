@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
+    'HelloWorld'
 ]
 
 MIDDLEWARE = [
@@ -128,4 +130,10 @@ STATICFILES_DIRS = (
     ('bootstrap', os.path.join(STATIC_ROOT, 'bootstrap').replace('\\','/')),
 )
 
-ALLOWED_HOSTS = ['catcoder.ngrok2.xiaomiqiu.cn']
+ALLOWED_HOSTS = ['catcoder.ngrok2.xiaomiqiu.cn','127.0.0.1']
+
+CRONJOBS = (
+    ('0 */10 * * * ?','wx.love_say'),
+)
+
+SECRET_KEY = 'cloud_yang'

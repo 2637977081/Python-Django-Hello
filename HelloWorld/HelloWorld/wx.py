@@ -11,8 +11,7 @@ from PIL import Image
 from wechat_sdk import WechatBasic
 from wechat_sdk.exceptions import ParseError
 from wechat_sdk.messages import TextMessage, ImageMessage, VoiceMessage, VideoMessage, LocationMessage
-from wechatpy import WeChatClient
-
+from .models import User
 import requests
 from django.http import HttpResponse
 
@@ -22,8 +21,8 @@ WECHAT_TOKEN = 'cloudyang'
 WEIXIN_APPID = 'wx1ceaf2b670549ad3'
 WEIXIN_APPSECRET = 'dd3933b46ac5366786b16b8f70b847bc'
 
-weChatClient = WeChatClient(access_token=WECHAT_TOKEN, appid=WEIXIN_APPID, secret=WEIXIN_APPSECRET)
 wechat = WechatBasic(token=WECHAT_TOKEN, appid=WEIXIN_APPID, appsecret=WEIXIN_APPSECRET)
+
 
 # wx token验证
 def wx_verification(request):
@@ -45,10 +44,13 @@ def wx_verification(request):
         wechat.parse_data(data=request.body)
         message = wechat.get_message()
         print('用户发送信息')
+        print(message.source)
         print(message.type)
         if isinstance(message, TextMessage):
             # 文本消息 Content	文本消息内容
             context = message.content.strip()
+            user_obj = User(appId=message.source,content=context,type='text',createTime=message.time)
+            user_obj.save()
             if context=='妖精' :
                 print('上传妖精照片')
                 # img = open('C:/Users/dell/Pictures/Saved Pictures/yaojing.jpg','rb')
@@ -83,10 +85,15 @@ def wx_verification(request):
                 city_str = context.split(":").pop(1)
                 result = wechat.response_text(weather(city_str))
                 return HttpResponse(result, content_type='application/xml')
+            elif '表白' in context:
+                result = wechat.response_text(love_say())
+                return HttpResponse(result, content_type='application/xml')
             result  = wechat.response_text(context)
             return HttpResponse(result, content_type='application/xml')
         elif isinstance(message, ImageMessage):
             # 图片消息 PicUrl	图片链接（由系统生成）
+            user_obj = User(appId=message.source, context=message.picurl, type='image', createTime=message.time)
+            user_obj.save()
             piurl = message.picurl
             #MediaId	图片消息媒体id，可以调用获取临时素材接口拉取数据。
             mediaId = message.media_id
@@ -236,3 +243,17 @@ def weather(city):
     message = today['ymd'] + '\r' + today['week'] + '\r' + today['high'] + ' ' + today['low'] + '\r' + today['type'] + '\r' + today['notice']
     return message
 
+
+def love_say():
+    filepath = os.path.join(STATIC_ROOT, 'json/loves.json')
+    file = open(filepath, 'r', encoding='UTF-8')
+    loves_json = json.load(file)
+    max_len=len(loves_json)
+    index = random.randint(0, max_len)
+    message = loves_json[index]
+    return message
+    # filepath = os.path.join(STATIC_ROOT, 'json/user.json')
+    # file = open(filepath, 'r', encoding='UTF-8')
+    # users_json = json.load(file)
+    # for user in users_json:
+    #     wechat.send_text_message(user,message)
