@@ -36,4 +36,5 @@ urlpatterns = [
     path('change',view.chang),
     path('send/email',view.send_email),
     path('wx',wx.wx_verification),
+    path('cat',view.cat),
 ]

@@ -130,3 +130,6 @@ def email_fun(image_first_path,image_second_path,receivers):
         print("邮件发送成功")
     except smtplib.SMTPException:
         print("Error: 无法发送邮件")
+
+def cat(request):
+    return render(request, 'cat.html')

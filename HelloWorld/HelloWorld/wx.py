@@ -7,6 +7,7 @@ import json
 import urllib
 
 import cv2
+import numpy as np
 from PIL import Image
 from wechat_sdk import WechatBasic
 from wechat_sdk.exceptions import ParseError
@@ -34,10 +35,10 @@ def wx_verification(request):
         timestamp = request.GET['timestamp']
         nonce = request.GET['nonce']
 
-        hashcode = token_verification(WECHAT_TOKEN,timestamp,nonce)
+        hashcode = token_verification(WECHAT_TOKEN, timestamp, nonce)
         print(hashcode)
         message = ''
-        if hashcode==signature:
+        if hashcode == signature:
             message = echostr
         return HttpResponse(message)
     elif request.method == 'POST':
@@ -49,19 +50,19 @@ def wx_verification(request):
         if isinstance(message, TextMessage):
             # 文本消息 Content	文本消息内容
             context = message.content.strip()
-            user_obj = User(appId=message.source,content=context,type='text',createTime=message.time)
+            user_obj = User(appId=message.source, content=context, type='text', createTime=message.time)
             user_obj.save()
-            if context=='妖精' :
+            if context == '妖精':
                 print('上传妖精照片')
                 # img = open('C:/Users/dell/Pictures/Saved Pictures/yaojing.jpg','rb')
-                path = os.path.join(STATIC_ROOT, 'images/yaojing.jpg').replace('\\','/')
+                path = os.path.join(STATIC_ROOT, 'images/yaojing.jpg').replace('\\', '/')
                 img = open(path, 'rb')
                 # print(type(img))
-                we_img = wechat.upload_media(media_file=img,media_type='image')
+                we_img = wechat.upload_media(media_file=img, media_type='image')
                 # print(we_img)
                 result = wechat.response_image(we_img['media_id'])
-                return HttpResponse(result,content_type='application/xml')
-            elif context=='猫' :
+                return HttpResponse(result, content_type='application/xml')
+            elif context == '猫':
                 print('上传猫照片')
                 # img = open('C:/Users/dell/Pictures/Saved Pictures/yaojing.jpg','rb')
                 path = os.path.join(STATIC_ROOT, 'images/mao.jpg').replace('\\', '/')
@@ -69,56 +70,81 @@ def wx_verification(request):
                 we_img = wechat.upload_media(media_file=img, media_type='image')
                 result = wechat.response_image(we_img['media_id'])
                 return HttpResponse(result, content_type='application/xml')
-            elif '色图' in context or '涩图' in context:
-                dir_path = 'F:/data/images'
+            elif '笑话图片' in context or '搞笑图片' in context:
+                dir_path = 'D:/python/workspace-django/HelloWorld/static/images/joke'
                 filenames = os.listdir(dir_path)
                 max_len = len(filenames)
-                index = random.randint(0,max_len)
+                index = random.randint(0, max_len)
                 filename = filenames.pop(index)
-                path = dir_path+'/'+filename
+                path = dir_path + '/' + filename
+                img = open(path, 'rb')
+                we_img = wechat.upload_media(media_file=img, media_type='image')
+                result = wechat.response_image(we_img['media_id'])
+                return HttpResponse(result, content_type='application/xml')
+            elif '段子' in context:
+                result = wechat.response_text(joke_text())
+                return HttpResponse(result, content_type='application/xml')
+            elif '色图' in context or '涩图' in context:
+                dir_path = 'D:/data/images'
+                filenames = os.listdir(dir_path)
+                max_len = len(filenames)
+                index = random.randint(0, max_len)
+                filename = filenames.pop(index)
+                path = dir_path + '/' + filename
                 img = open(path, 'rb')
                 we_img = wechat.upload_media(media_file=img, media_type='image')
                 result = wechat.response_image(we_img['media_id'])
                 return HttpResponse(result, content_type='application/xml')
             elif '天气' in context:
-                context=context.replace('：',':')
+                context = context.replace('：', ':')
                 city_str = context.split(":").pop(1)
                 result = wechat.response_text(weather(city_str))
                 return HttpResponse(result, content_type='application/xml')
             elif '表白' in context:
                 result = wechat.response_text(love_say())
                 return HttpResponse(result, content_type='application/xml')
-            result  = wechat.response_text(context)
+            elif '简历地址' in context:
+                result = wechat.response_text('这是我Github简历地址^-^：\rhttps://2637977081.github.io/')
+                return HttpResponse(result, content_type='application/xml')
+            elif '简历图片' in context:
+                name = 'images/resume/resume.jpg'
+                path = os.path.join(STATIC_ROOT, name).replace('\\', '/')
+                print(path)
+                img = open(path, 'rb')
+                we_img = wechat.upload_media(media_file=img, media_type='image')
+                result = wechat.response_image(we_img['media_id'])
+                return HttpResponse(result, content_type='application/xml')
+            result = wechat.response_text(context)
             return HttpResponse(result, content_type='application/xml')
         elif isinstance(message, ImageMessage):
             # 图片消息 PicUrl	图片链接（由系统生成）
-            user_obj = User(appId=message.source, context=message.picurl, type='image', createTime=message.time)
-            user_obj.save()
+            # user_obj = User(appId=message.source, context=message.picurl, type='image', createTime=message.time)
+            # user_obj.save()
             piurl = message.picurl
-            #MediaId	图片消息媒体id，可以调用获取临时素材接口拉取数据。
+            # MediaId	图片消息媒体id，可以调用获取临时素材接口拉取数据。
             mediaId = message.media_id
             # we_img = wechat.download_media(mediaId)
             print(piurl)
             changeId = change(piurl)
             result = wechat.response_image(changeId)
             return HttpResponse(result, content_type='application/xml')
-        elif isinstance(message,VoiceMessage):
+        elif isinstance(message, VoiceMessage):
             # 语音消息 MediaId	语音消息媒体id，可以调用获取临时素材接口拉取数据。
             mediaId = message.media_id
-            #Format	语音格式，如amr，speex等
+            # Format	语音格式，如amr，speex等
             format = message.format
-            #Recognition	语音识别结果，UTF8编码 【需要开通】
+            # Recognition	语音识别结果，UTF8编码 【需要开通】
             recognition = message.recognition
             result = wechat.response_voice(mediaId)
             return HttpResponse(result, content_type='application/xml')
-        elif isinstance(message,VideoMessage):
+        elif isinstance(message, VideoMessage):
             # MediaId 视频消息媒体id，可以调用获取临时素材接口拉取数据。
             mediaId = message.media_id
             # ThumbMediaId 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
             thumbMediaId = message.thumb_media_id
             result = wechat.response_voice(mediaId)
             return HttpResponse(result, content_type='application/xml')
-        elif isinstance(message,LocationMessage):
+        elif isinstance(message, LocationMessage):
             # Location_X	地理位置维度
             # Location_Y	地理位置经度
             location = message.location
@@ -128,7 +154,6 @@ def wx_verification(request):
             label = message.label
             result = wechat.response_text(label)
             return HttpResponse(result, content_type='application/xml')
-
 
 
 # 生成hashcode 对比
@@ -172,8 +197,8 @@ def parse_xml(data):
 
 
 # 格式化xml
-def format_xml(toUserName, fromUserName, msgType,content):
-    msg ={}
+def format_xml(toUserName, fromUserName, msgType, content):
+    msg = {}
     msg['ToUserName'] = toUserName
     msg['FromUserName'] = fromUserName
     msg['CreateTime'] = int(time.time())
@@ -193,15 +218,15 @@ def format_xml(toUserName, fromUserName, msgType,content):
 
 def change(url):
     print('下载图片')
-    name = 'images/cv2/'+ str(time.time()) + '.jpg'
+    name = 'images/cv2/' + str(time.time()) + '.jpg'
     input_image_path = os.path.join(STATIC_ROOT, name).replace('\\', '/')
-    output_image_path = input_image_path.replace(".jpg","-1.jpg")
+    output_image_path = input_image_path.replace(".jpg", "-1.jpg")
     conn = urllib.request.urlopen(url)
     f = open(input_image_path, 'wb')
     f.write(conn.read())
     f.close()
     print('改变图片')
-    cv_image(input_image_path,output_image_path)
+    cv_image2(input_image_path, output_image_path)
     print('上传图片，返回id')
     img = open(output_image_path, 'rb')
     we_img = wechat.upload_media(media_file=img, media_type='image')
@@ -221,10 +246,24 @@ def cv_image(input_image_path, output_image_path):
     cv2.imwrite(output_image_path, img_edge)
 
 
+def cv_image2(input_image_path, output_image_path):
+    img_rgb = cv2.imread(input_image_path)
+    img_blur = cv2.GaussianBlur(img_rgb, (21, 21), 0, 0)
+    img_blend = cv2.divide(img_rgb, img_blur, scale=256)
+    img_result = cv2.cvtColor(img_blend, cv2.COLOR_RGB2GRAY)
+    # # 对原图进行模糊化
+    # img_gray = cv2.medianBlur(img_result, 5)
+    # # 二值化操作
+    img_edge = cv2.adaptiveThreshold(img_result, 255,
+                                     cv2.ADAPTIVE_THRESH_MEAN_C,
+                                     cv2.THRESH_BINARY, blockSize=3, C=2)
+    cv2.imwrite(output_image_path, img_result)
+
+
 def weather(city):
     print(city)
-    filepath = os.path.join(STATIC_ROOT,'json/citycode.json')
-    file = open(filepath,'r', encoding='UTF-8')
+    filepath = os.path.join(STATIC_ROOT, 'json/citycode.json')
+    file = open(filepath, 'r', encoding='UTF-8')
     city_json = json.load(file)
     city_code = "101010100"
     for item in city_json:
@@ -232,7 +271,7 @@ def weather(city):
             city_code = item['city_code']
             break
 
-    url = 'http://t.weather.sojson.com/api/weather/city/'+city_code
+    url = 'http://t.weather.sojson.com/api/weather/city/' + city_code
     result = requests.get(url)
 
     content = result.content.decode()
@@ -240,7 +279,25 @@ def weather(city):
     print(content_json['data']['forecast'])
     forecast = content_json['data']['forecast']
     today = forecast.pop(0)
-    message = today['ymd'] + '\r' + today['week'] + '\r' + today['high'] + ' ' + today['low'] + '\r' + today['type'] + '\r' + today['notice']
+    message = today['ymd'] + '\r' + today['week'] + '\r' + today['high'] + ' ' + today['low'] + '\r' + today[
+        'type'] + '\r' + today['notice']
+    return message
+
+
+def joke_text():
+    time_rand = random.randint(0, 3600)
+    time_str = str(int(time.time())-time_rand)
+    page_rand = random.randint(1,20)
+    page_str = str(page_rand)
+    url = 'http://v.juhe.cn/joke/content/list.php?key=7b9a08d5c9f1439d060a57428a360ec5&page='+page_str+'&pagesize=1' \
+                                                                                                       '&sort=desc' \
+                                                                                                       '&time='+time_str
+    print(url)
+    result = requests.get(url)
+    content = result.content.decode()
+    content_json = json.loads(content)
+    print(content_json)
+    message = content_json['result']['data'].pop(0)['content']
     return message
 
 
@@ -248,7 +305,7 @@ def love_say():
     filepath = os.path.join(STATIC_ROOT, 'json/loves.json')
     file = open(filepath, 'r', encoding='UTF-8')
     loves_json = json.load(file)
-    max_len=len(loves_json)
+    max_len = len(loves_json)
     index = random.randint(0, max_len)
     message = loves_json[index]
     return message

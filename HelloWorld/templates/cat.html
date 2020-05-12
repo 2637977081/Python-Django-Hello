@@ -1,0 +1,131 @@
+<html>
+	<head>
+		<title>妖精的猫</title>
+		<style type="text/css">
+			#cat {
+				 width: 143px;
+				 height: 104px;  
+			}
+			#cat_left {
+				position:absolute;
+				z-index:0
+			}
+			#cat_right {
+				position:absolute;
+				z-index:100
+			}
+		 </style>
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+		
+	</head>
+	<body style="background-color:rgba(254,242,230,1.00)" onmousemove="move(event)"> 
+		<div id="cat">
+			<p id="cat_text">傻猫你能追到我么</p>
+			<img src="/static/images/cat/cat_left.gif" id="cat_left">
+			<img src="/static/images/cat/cat_right.gif" id="cat_right">
+		</div>
+		<script>
+			var w ;//页面的宽度
+			var h;
+			var img;//图像对象
+			var img1;//图像对象
+			var imgLeft;//图像左边的位置
+			var imgWidth; //图像 的宽度
+			var delta =5 ;//每次移动的距离
+			var delay =30;//时间
+
+			window.onload = function(){
+				w = window.innerWidth;
+				h = window.innerHeight;
+			//	img = document.getElementById("img");
+			//	img1 = document.getElementById("img1");
+			//	imgLeft = img.offsetLeft;
+			//	imgWidth = img.width;
+			//	move();
+			};
+			
+			function move(e){
+				x=e.clientX;
+				y=e.clientY;
+				console.log("鼠标位置："+ x+","+y);
+				var top=$('#cat').offset().top;
+                var left=$('#cat').offset().left;
+				console.log("div:"+left+","+top)
+				$('div').offset(function(index,old){
+                    console.log(index);
+					var nowTop;
+					var oldTop=old.top;
+					var nowLeft;
+					var oldLeft=old.left;
+					if(x<=left){
+						$("#cat_left").css("z-index","100");
+						$("#cat_right").css("z-index","0");
+						if(oldLeft-delta>x){
+							nowLeft = oldLeft-delta;
+						}else{
+							nowLeft = x;
+						}
+					}
+					if(x>left){
+						$("#cat_left").css("z-index","0");
+						$("#cat_right").css("z-index","100");
+						if(oldLeft+delta<x){
+							nowLeft = oldLeft+delta;
+						}else{
+							nowLeft = x;
+						}
+					}
+					if(y<=top){
+						if(oldTop-delta>y){
+							nowTop = oldTop-delta;
+						}else{
+							nowTop = y;
+						}
+					}
+					if(y>top){
+						if(oldTop+delta<y){
+							nowTop = oldTop+delta;
+						}else{
+							nowTop = y;
+						}
+					}
+					if(left>w){
+						left = w;
+					}
+					if(top>h){
+						top = h;
+					}
+					
+					var text = "傻猫你能追到我么";
+					if(x<=left+delta&& x>=left-delta &&y<=top+delta&&y>=top-delta){
+						text = "差一点了喵";
+					}
+					console.log(text);
+					document.getElementById("cat_text").innerHTML=text;
+					return{
+						top:nowTop,
+						left:nowLeft
+					}
+                })
+				//判断图像是否越界（超出页面的宽度）这里我以整个页面宽度为边界
+				//if(imgLeft<0||imgLeft+imgWidth>w){
+				//	delta=-delta;//变号
+				//}
+				//img.style.left = imgLeft+delta+"px";
+				//img1.style.left = imgLeft+delta+"px";
+				//if(delta==-5){
+				//	$("#img1").css("z-index","100")//通过权重来显示或者隐藏图片
+				//}else{
+				//	$("#img1").css("z-index","0")
+				//}
+				
+				//移动位置后需要重新修改左边的位置
+				//imgLeft = img.offsetLeft;
+				//重复不断调用函数
+				//setTimeout(move,delay);
+			}
+			
+			
+		</script>
+	</body>
+</html>
